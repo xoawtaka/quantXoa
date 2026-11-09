@@ -6,7 +6,7 @@ case-only collision on Windows. Current execution state is in [PROGRESS](PROGRES
 
 | Milestone | Objective and acceptance gate | Current status |
 |---|---|---|
-| M0 | Audit source/tests, preserve starting SHA, create feature branch and agent workflow, reproduce sample/full suite, fix baseline blockers, publish architecture/protocol/checkpoint; local reviewable commit | IN PROGRESS |
+| M0 | Audit source/tests, preserve starting SHA, create feature branch and agent workflow, reproduce sample/full suite, fix baseline blockers, publish architecture/protocol/checkpoint; local reviewable commit | COMPLETE |
 | M1 | Track research source without exposing data; one validated experiment configuration/manifest schema, reproducibility IDs, bounded trial registration and research-only default; invalid/unknown configuration tests | NOT STARTED |
 | M2 | Explicit intraday ETF ingestion, provenance/hash/Parquet snapshots, calendar/session/DST/partial-bar validation and deterministic 15m/30m/1h/2h construction; fixture tests and authentic sample if available | NOT STARTED |
 | M3 | Preserve W09, implement exact hourly baseline plus common order-based comparator and cash/passive baseline; prefix-invariance and decision-to-fill tests; label synthetic demonstrations | NOT STARTED |

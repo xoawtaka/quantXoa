@@ -12,7 +12,7 @@ and public engine interfaces are preserved.
 
 ## M0 — Repository audit and reproducible baseline
 
-Status: **IN PROGRESS** — implementation and verification complete; local commit pending.
+Status: **COMPLETE** — implementation, verification, diff review and local commit complete.
 
 Objective: establish the actual engine/data boundaries and a reproducible
 Windows baseline before implementing hourly research.
@@ -22,7 +22,11 @@ Starting Git state: clean `main`, SHA
 Working branch: `feat/quantxoa-research`.
 Origin: `https://github.com/xoawtaka/quantXoa.git`.
 Upstream: `https://github.com/QuantJourneyOrg/quantjourney-bt.git`.
-Implementation commit: pending final checks; no remote push authorized.
+Implementation commit: `f842a29b93837e2fb955e2ccbf97ef20fb82b2bc`
+(`Establish quantXoa M0 audit and reproducible Windows baseline`).
+This subsequent checkpoint records the verified implementation SHA; its own
+documentation-only commit is discoverable with `git log -1 -- docs/PROGRESS.md`.
+No changes were pushed or merged.
 
 Completed work:
 
@@ -77,6 +81,7 @@ All commands from repository root. Python commands use
 | `tools/check_mypy_baseline.py` after fix | Passed: **760 reviewed diagnostics, 0 changes**; `mypy.log`; not a zero-error codebase |
 | `tools/verify_public_release.py` | Passed source-manifest verification (distribution build/publish not performed) |
 | `git diff --check` and source diff review | Passed |
+| `git diff --cached --check`, staged file review, local implementation commit | Passed; 16 intended files committed; clean tree immediately afterward |
 
 The four remaining warnings are Seaborn's pending Matplotlib `set_bad`
 deprecation in report smoke tests. No tests were skipped in the final run.
