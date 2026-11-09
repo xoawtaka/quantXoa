@@ -10,6 +10,7 @@ import json
 import os
 import runpy
 import sys
+from io import TextIOWrapper
 from pathlib import Path
 
 from rich.console import Console
@@ -164,6 +165,11 @@ def render_backtester_access_error(
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Redirected Windows streams may use CP1252. Keep the selected encoding,
+    # but escape unsupported symbols instead of failing after a completed run.
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, TextIOWrapper):
+            stream.reconfigure(errors="backslashreplace")
     args = list(sys.argv[1:] if argv is None else argv)
     if len(args) != 1:
         print("Usage: python -m backtester.cli.strategy_runner <strategy.py>", file=sys.stderr)

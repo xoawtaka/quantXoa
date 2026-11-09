@@ -137,6 +137,17 @@ def test_immutable_snapshot_hash_and_minimal_provenance():
 @pytest.fixture
 def offline(monkeypatch):
     attempts = []
+    original_socketpair = socket.socketpair
+    original_connect = socket.socket.connect
+    original_connect_ex = socket.socket.connect_ex
+
+    def internal_socketpair(*args, **kwargs):
+        # Windows implements socketpair using a synchronous loopback connection.
+        # Permit only its construction; strategy callbacks never run in this scope.
+        with monkeypatch.context() as internal:
+            internal.setattr(socket.socket, "connect", original_connect)
+            internal.setattr(socket.socket, "connect_ex", original_connect_ex)
+            return original_socketpair(*args, **kwargs)
 
     def forbidden(*args, **kwargs):
         attempts.append("network")
@@ -148,6 +159,7 @@ def offline(monkeypatch):
 
     monkeypatch.setattr(socket.socket, "connect", forbidden)
     monkeypatch.setattr(socket.socket, "connect_ex", forbidden)
+    monkeypatch.setattr(socket, "socketpair", internal_socketpair)
     monkeypatch.setattr(httpx, "Client", forbidden)
     monkeypatch.setattr(Backtester, "_get_sdk_client", forbidden_sdk)
     for key in (
@@ -179,6 +191,23 @@ def strategy(tmp_path, **kwargs):
         save_text_reports=True,
         **kwargs,
     )
+
+
+def test_offline_guard_allows_socketpair_but_rejects_connections(offline):
+    # Windows asyncio uses a loopback socket pair for internal wakeups.
+    reader, writer = socket.socketpair()
+    try:
+        writer.sendall(b"wake")
+        assert reader.recv(4) == b"wake"
+    finally:
+        reader.close()
+        writer.close()
+    for method in ("connect", "connect_ex"):
+        for address in (("127.0.0.1", 9), ("192.0.2.1", 443)):
+            with socket.socket() as client:
+                with pytest.raises(AssertionError, match="network access"):
+                    getattr(client, method)(address)
+    assert offline == ["network"] * 4
 
 
 def test_two_year_native_parity_and_run_metadata(tmp_path, offline):

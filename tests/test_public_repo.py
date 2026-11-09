@@ -447,7 +447,7 @@ def test_metadata_archive_writes_json_only(tmp_path) -> None:
 
 def test_strategy_launcher_check_mode() -> None:
     completed = subprocess.run(
-        ["./strategy.sh", "example_weights_01_sma_daily", "--check"],
+        [sys.executable, "strategy.py", "example_weights_01_sma_daily", "--check"],
         cwd=ROOT,
         check=True,
         text=True,
@@ -459,7 +459,7 @@ def test_strategy_launcher_check_mode() -> None:
 
 def test_strategy_launcher_lists_docstring_titles() -> None:
     completed = subprocess.run(
-        ["./strategy.sh", "--list"],
+        [sys.executable, "strategy.py", "--list"],
         cwd=ROOT,
         check=True,
         text=True,
@@ -472,7 +472,7 @@ def test_strategy_launcher_lists_docstring_titles() -> None:
 
 def test_strategy_launcher_documents_batch_mode() -> None:
     completed = subprocess.run(
-        ["./strategy.sh", "--help"],
+        [sys.executable, "strategy.py", "--help"],
         cwd=ROOT,
         check=True,
         text=True,

@@ -44,7 +44,9 @@ def _context() -> dict[str, Any]:
             packages[package] = "<missing>"
     return {
         "config_sha256": hashlib.sha256(encoded).hexdigest(),
-        "lock_sha256": hashlib.sha256(lock_path.read_bytes()).hexdigest(),
+        # Git may check out the same lockfile as CRLF on Windows. Preserve the
+        # reviewed LF identity while still detecting every content change.
+        "lock_sha256": hashlib.sha256(lock_path.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
         "packages": packages,
     }
 

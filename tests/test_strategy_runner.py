@@ -6,6 +6,9 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
 from io import StringIO
 
 import pytest
@@ -13,6 +16,26 @@ from rich.console import Console
 
 from backtester.cli import strategy_runner
 from backtester.sdk.client import BacktesterAccessError, PrepareValidationError
+
+
+@pytest.mark.parametrize("encoding", ["cp1252", "utf-8"])
+def test_strategy_process_handles_unicode_on_redirected_streams(tmp_path, encoding) -> None:
+    script = tmp_path / "unicode_strategy.py"
+    script.write_text(
+        'import sys\nprint("completed \\u2192 report")\n'
+        'print("diagnostic \\u2192 stderr", file=sys.stderr)\n',
+        encoding="utf-8",
+    )
+    completed = subprocess.run(
+        [sys.executable, "-m", "backtester.cli.strategy_runner", str(script)],
+        env={**os.environ, "PYTHONIOENCODING": f"{encoding}:strict"},
+        capture_output=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr.decode(encoding)
+    arrow = "\u2192" if encoding == "utf-8" else r"\u2192"
+    assert f"completed {arrow} report" in completed.stdout.decode(encoding)
+    assert f"diagnostic {arrow} stderr" in completed.stderr.decode(encoding)
 
 
 def test_missing_credentials_keep_guidance_and_failure_exit(monkeypatch, capsys) -> None:

@@ -29,6 +29,23 @@ environment is optional.
 
 ## Run the deterministic sample
 
+For reproducible quantXoa development, use the reviewed lockfile from the
+repository root (requires `uv`):
+
+```powershell
+uv sync --frozen --python 3.12 --extra dev --extra data --extra wf --extra typecheck --extra parquet
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check .
+.\.venv\Scripts\python.exe -m ruff format --check .
+.\.venv\Scripts\python.exe tools/check_mypy_baseline.py
+.\.venv\Scripts\python.exe tools/verify_public_release.py
+```
+
+The isolated strategy runner retains the terminal encoding and escapes
+unsupported symbols when output is redirected (for example, CP1252 logs).
+See [M0 results and research limitations](docs/PROGRESS.md). The sample uses
+synthetic daily bars; it does not verify hourly data or historical performance.
+
 PowerShell:
 
 ```powershell
