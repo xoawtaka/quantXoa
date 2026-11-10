@@ -182,3 +182,10 @@ both backtester/observations/__init__.py
 both backtester/observations/adanos.py
 sdist strategies/example_weights_26_adanos_observations.py
 sdist _docs/observations.md
+
+# quantXoa research documentation; runtime package boundaries are unchanged.
+sdist docs/architecture.md
+sdist docs/repository-audit.md
+sdist docs/research-methodology.md
+sdist docs/quantxoa-roadmap.md
+sdist docs/PROGRESS.md

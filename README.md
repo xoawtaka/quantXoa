@@ -1,5 +1,15 @@
 # QuantJourney Backtester
 
+## quantXoa research workspace
+
+This fork develops **quantXoa**, an incremental research layer on the upstream
+`backtester` engine. Start with the [project checkpoint](docs/PROGRESS.md),
+[repository audit](docs/repository-audit.md), [architecture](docs/architecture.md),
+[research protocol](docs/research-methodology.md), and
+[milestone roadmap](docs/quantxoa-roadmap.md). Research/backtesting is the default;
+no strategy has been validated for paper execution. Bundled sample results are
+synthetic software demonstrations.
+
 A Python-native backtesting engine for reproducible portfolio research.
 
 [![Python](https://img.shields.io/badge/Python-%3E%3D3.11-3776AB?logo=python&logoColor=white)](https://python.org)
